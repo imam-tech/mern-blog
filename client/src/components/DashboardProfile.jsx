@@ -59,8 +59,9 @@ export default function DashboardProfile() {
             <form className="flex flex-col gap-4">
                 <input type="file" accept="image/*" onChange={handleImageChange} ref={filePickerUrl} hidden />
                 <div className="relative w-32 h-32 self-center cursor-pointer shadow-md rounded-full" onClick={() => filePickerUrl.current.click()}>
-                    {imageFileUploadProgress && (
+                    {imageFileUploadProgress ? (
                         <CircularProgressbar value={imageFileUploadProgress || 0} 
+                        text={`${imageFileUploadProgress}%`} 
                         strokeWidth={5} 
                         styles={{
                             root: {
@@ -74,7 +75,7 @@ export default function DashboardProfile() {
                                 stroke: `rgba(62, 152, 199, ${imageFileUploadProgress / 100})`
                             }
                         }}  />
-                    )}
+                    ) : ''}
                     <img src={imageFileUrl || currentUser.profilePicture} alt="user" className={`rounded-full w-full h-full border-8 border-[lightgray] object-cover ${imageFileUploadProgress && imageFileUploadProgress < 100 && 'opacity-60'} `} />
                 </div>
 
