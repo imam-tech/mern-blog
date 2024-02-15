@@ -6,6 +6,7 @@ import { app } from "../firebase.js"
 import { CircularProgressbar } from 'react-circular-progressbar'
 import { updateStart, updateSuccess, updateFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutSuccess } from "../redux/user/userSlice.js" 
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
 export default function DashboardProfile() {
     const [imageFile, setImageFile] = useState(null)
@@ -18,7 +19,7 @@ export default function DashboardProfile() {
     const [formData, setFormData] = useState({})
     const [showModal, setShowModal] = useState(false)
 
-    const { currentUser, error } = useSelector(state => state.user)
+    const { currentUser, error, loading } = useSelector(state => state.user)
     const filePickerUrl = useRef()
     const dispatch = useDispatch();
 
@@ -177,9 +178,16 @@ export default function DashboardProfile() {
                 <TextInput type="text" id="username" placeholder="username" defaultValue={currentUser.username} onChange={handleChange} />
                 <TextInput type="email" id="email" placeholder="email" defaultValue={currentUser.email} onChange={handleChange} />
                 <TextInput type="password" id="password" placeholder="password" onChange={handleChange} />
-                <Button type="submit" gradientDuoTone='purpleToBlue' outline>
-                    Update
+                <Button type="submit" gradientDuoTone='purpleToBlue' outline disabled={loading || imageFileUploading}>
+                    {loading ? '...Loading' : 'Update'}
                 </Button>
+                {currentUser.isAdmin && (
+                    <Link to={"/create-post"}>
+                        <Button type="button" gradientDuoTone="purpleToPink" className="w-full">
+                            Create a Post
+                        </Button>
+                    </Link>
+                )}
             </form>
             <div className="text-red-500 flex justify-between mt-5">
                 <span onClick={() => setShowModal(true)} className="cursor-pointer">Delete Account</span>
